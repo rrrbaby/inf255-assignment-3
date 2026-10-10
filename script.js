@@ -72,7 +72,48 @@ function displayAnimals(animalArray) {
 	 * refresh the page. Clicking the buttons won't do anything yet. They
 	 * start working after TODOs #2 and #3 are complete.
 	 */
+
+	animals.forEach(function (animal) {
+		const card = document.createElement("p");
+		card.classList.add("animal-card")
+		if (animal.adopted) {
+			card.classList.add("adopted");
+		}
+
+		const name = document.createElement("p");
+		name.textContent = animal.name;
+
+		const species = document.createElement("p")
+		species.textContent = animal.species;
+
+		const age = document.createElement("p")
+		age.textContent = animal.age;
+
+		const button = document.createElement("button")
+		
+		const status = document.createElement("p")
+		if (animal.adopted) {
+			status.textContent = "Adopted";
+			button.textContent = "Return";
+		} else {
+			status.textContent = "Available";
+			button.textContent = "Adopt";
+		}
+
+		// This call back will run when the button is clicked
+		// Based on the animals id, it will toggle adoption status
+		button.addEventListener("click", toggleAdoption(animal.id))
+
+		card.appendChild(name);
+		card.appendChild(species);
+		card.appendChild(age);
+		card.appendChild(status);
+		card.appendChild(button);
+		animalList.appendChild(card);
+	});
 }
+
+displayAnimals(animals);
 
 // ------------------------------------
 // Adopt or Return an Animal
@@ -91,8 +132,16 @@ function toggleAdoption(animalId) {
 	 * clicking a button changes the animal's adopted value, but the page
 	 * won't redraw, so it will look like nothing happened.
 	 */
-}
 
+	const animalIndex = animals.findIndex(function (animal) {
+		return animal.id === animal.id
+		console.log(animalIndex);
+		
+	})
+		if (animalIndex = "") {
+		return	
+	}
+}
 // ------------------------------------
 // Filter, Sort, and Update
 // ------------------------------------
