@@ -113,8 +113,6 @@ function displayAnimals(animalArray) {
 	});
 }
 
-displayAnimals(animals);
-
 // ------------------------------------
 // Adopt or Return an Animal
 // ------------------------------------
@@ -134,13 +132,16 @@ function toggleAdoption(animalId) {
 	 */
 
 	const animalIndex = animals.findIndex(function (animal) {
-		return animal.id === animal.id
-		console.log(animalIndex);
-		
+		return animal.id === animalId
 	})
-		if (animalIndex = "") {
-		return	
+
+	if (animalIndex != animalId) {
+	return	
 	}
+
+	animal.adopted = !(animal.adopted);
+	updateDisplay()
+
 }
 // ------------------------------------
 // Filter, Sort, and Update
@@ -167,6 +168,30 @@ function updateDisplay() {
 	 * work. The filter buttons and sort menu won't do anything until TODO #5
 	 * is complete, because nothing changes activeFilter or activeSort yet.
 	 */
+
+	const newAnimals = animals.slice();
+
+	if (activeFilter === "available") {
+		newAnimals = newAnimals.filter(function (animal) {
+			return !animal.adopted;
+		});
+	} else if (activeFilter === "adopted") {
+		newAnimals = newAnimals.filter(function (animal) {
+			return animal.adopted;
+		});
+	}
+	if (activeSort === "name") {
+		newAnimals.sort(function (a, b) {
+			return a.name - b.name
+		});
+	}
+	if (activeSort === "age") {
+		newAnimals.sort(function (a, b) {
+			return a.age - b.age;
+		});
+	}
+	displayAnimals(newAnimals);
+	updateCount();
 }
 
 // ------------------------------------
