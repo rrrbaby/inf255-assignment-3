@@ -73,7 +73,7 @@ function displayAnimals(animalArray) {
 	 * start working after TODOs #2 and #3 are complete.
 	 */
 
-	animals.forEach(function (animal) {
+	animalArray.forEach(function (animal) {
 		const card = document.createElement("p");
 		card.classList.add("animal-card")
 		if (animal.adopted) {
@@ -87,7 +87,7 @@ function displayAnimals(animalArray) {
 		species.textContent = animal.species;
 
 		const age = document.createElement("p")
-		age.textContent = animal.age;
+		age.textContent = animal.age + " years old";
 
 		const button = document.createElement("button")
 		
@@ -102,7 +102,9 @@ function displayAnimals(animalArray) {
 
 		// This call back will run when the button is clicked
 		// Based on the animals id, it will toggle adoption status
-		button.addEventListener("click", toggleAdoption(animal.id))
+		button.addEventListener("click", function () {
+			toggleAdoption(animal.id);
+		});
 
 		card.appendChild(name);
 		card.appendChild(species);
@@ -131,11 +133,11 @@ function toggleAdoption(animalId) {
 	 * won't redraw, so it will look like nothing happened.
 	 */
 
-	const animalIndex = animals.findIndex(function (animal) {
+	const animal = animals.find(function (animal) {
 		return animal.id === animalId
 	})
 
-	if (animalIndex != animalId) {
+	if (animal === undefined) {
 	return	
 	}
 
@@ -169,20 +171,20 @@ function updateDisplay() {
 	 * is complete, because nothing changes activeFilter or activeSort yet.
 	 */
 
-	const newAnimals = animals.slice();
+	let newAnimals = animals.slice();
 
 	if (activeFilter === "available") {
 		newAnimals = newAnimals.filter(function (animal) {
-			return !animal.adopted;
+			return animal.adopted === false;
 		});
 	} else if (activeFilter === "adopted") {
 		newAnimals = newAnimals.filter(function (animal) {
-			return animal.adopted;
+			return animal.adopted === true;
 		});
 	}
 	if (activeSort === "name") {
 		newAnimals.sort(function (a, b) {
-			return a.name - b.name
+			return a.name.localeCompare(b.name);
 		});
 	}
 	if (activeSort === "age") {
@@ -214,6 +216,12 @@ function updateCount() {
 	 * Note: When this TODO is complete, the message appears when the page
 	 * opens and changes every time an animal is adopted or returned.
 	 */
+
+	const countParagraph = document.querySelector("#animal-count");
+	const availableAnimals = animals.filter(function (animal) {
+		return animal.adopted === false;
+	});
+	countParagraph.textContent = `${availableAnimals.length} of ${animals.length} animals are available for adoption.`;
 }
 
 // ------------------------------------
@@ -240,5 +248,25 @@ const sortSelect = document.querySelector("#sort-animals");
  */
 
 // Display the original list and the count when the page first opens.
+allButton.addEventListener("click", function () {
+	activeFilter = "all";
+	updateDisplay();
+});
+
+availableButton.addEventListener("click", function () {
+	activeFilter = "available";
+	updateDisplay();
+});	
+
+adoptedButton.addEventListener("click", function () {
+	activeFilter = "adopted"
+	updateDisplay();
+});
+
+sortSelect.addEventListener("change", function () {
+	activeSort = sortSelect.value;
+	updateDisplay();
+});
+
 displayAnimals(animals);
 updateCount();
